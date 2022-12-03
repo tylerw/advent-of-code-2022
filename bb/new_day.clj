@@ -17,12 +17,12 @@
                                :year :string}}}
   [{:keys [year day]
     :or {year "22"}}]
-  (let [new-year (str "aoc" year)
+  (let [new-year (str "aoc20" year)
         day-number day
         new-day (str "day"
                      (ensure-leading-zero day-number))
-        day01 (slurp (fs/file "src" "aoc22" "day01.cljc"))
-        replaced (str/replace day01 "aoc22" new-year)
+        day01 (slurp (fs/file "src" "aoc2022" "day01.cljc"))
+        replaced (str/replace day01 "aoc2022" new-year)
         replaced (str/replace replaced "day01" new-day)]
     (fs/create-dirs "src" new-year)
     (fs/create-dirs "resources" new-year)
@@ -36,7 +36,7 @@
               (spit new-day-resource body)))
           (do (println "Tip: set the AOC_SESSION environment variable to the Advent of Code session cookie to retrieve your input automatically!")
               (println "For now, a copy of the input of day 1 is copied as a stub.")
-              (fs/copy (fs/file "resources" "aoc22" "day01.txt")
+              (fs/copy (fs/file "resources" "aoc2022" "day01.txt")
                        new-day-resource)))
         (println (format "File %s already exists." (str new-day-resource)))))
     (let [new-day (fs/file "src" new-year (str new-day ".cljc"))]
