@@ -1,6 +1,9 @@
 {:paths ["src" "resources"]
  :deps {org.clojure/clojure {:mvn/version "1.11.1"}
-        org.babashka/cli {:mvn/version "0.5.40"}}
+        org.babashka/cli {:mvn/version "0.5.40"}
+        net.cgrand/xforms {:mvn/version "0.19.4"}
+        henryw374/cljc.java-time {:git/url "https://github.com/henryw374/cljc.java-time"
+                                  :git/sha "57b22e3a7f2201095b2d225e5a4016aa267a5946"}}
  :aliases
  {:test
   {:extra-paths ["test"]
