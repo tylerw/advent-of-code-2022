@@ -12,13 +12,13 @@
 (def input
   (->> (ui/day-input 4)
        (into []
-              (map #(-> % (str/split #"," 2) (->> (map range->set)))))))
+             (map #(-> % (str/split #"," 2) (->> (map range->set)))))))
 
 (defn part-1
   []
   (->> input
-      (x/count (comp (map (fn [[a b]] (or (set/subset? a b) (set/subset? b a))))
-                     (filter identity)))))
+       (x/count (filter (fn [[a b]]
+                          (or (set/subset? a b) (set/subset? b a)))))))
 
 (defn part-2
   []
