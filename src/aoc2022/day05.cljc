@@ -1,15 +1,13 @@
 (ns aoc2022.day05
-  (:require [aoc2022.utils.input :as ui]))
-
-(defn transpose [m]
-  (apply mapv vector m))
+  (:require [aoc2022.utils.input :as ui]
+            [aoc2022.utils.coll :as uc]))
 
 (def stacks
   (->> (ui/day-input 5)
-       (into [] (take 9))
-       transpose
+       (into [] (take-while #(not= % "")))
+       uc/transpose
        (filter #(Character/isDigit (last %)))
-       (map #(->> (remove #{\space} %) vec))
+       (map #(->> % (remove #{\space}) vec))
        (reduce (fn [m stack]
                  (assoc m (str (last stack)) (reverse (pop stack))))
                {})))
@@ -17,7 +15,7 @@
 (def directives
   (->> (ui/day-input 5)
        (into []
-             (comp (drop 10)
+             (comp (drop-while #(not (re-find #"move" %)))
                    (map #(let [[_ n from to]
                                (re-matches #"move (\d+) from (\d) to (\d)" %)]
                            [(parse-long n) from to]))))))
@@ -28,10 +26,6 @@
   (-> m
       (update from #(drop-last n %))
       (update to #(concat % (->> (m from) reverse (take n) f)))))
-
-(defn print-stacks
-  [stacks]
-  (-> stacks (update-vals #(apply str %))))
 
 (defn get-answer
   [stacks]
@@ -54,3 +48,12 @@
 (defn part-2
   []
   (base stacks directives reverse))
+
+;;;
+; debugging
+(comment
+  (defn print-stacks
+    [stacks]
+    (-> stacks (update-vals #(apply str %))))
+
+)
