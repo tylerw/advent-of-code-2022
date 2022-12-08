@@ -23,3 +23,13 @@
 (defn day-input-string
   ([day year] (-> (day-input-resource day year) slurp str/trim))
   ([day] (day-input-string day (current-year))))
+
+(defn day-input-intmatrix
+  "Read a block of numbers (from a day's input) as a matrix."
+  ([day year] (let [xf (comp
+                         (map seq)
+                         (map (fn [coll] (map #(Character/digit % 10) coll))))]
+                (->> (day-input day year)
+                     (into [] xf)
+                     m/matrix)))
+  ([day] (day-input-intmatrix day (current-year))))
