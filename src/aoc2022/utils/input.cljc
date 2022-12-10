@@ -1,7 +1,8 @@
 (ns aoc2022.utils.input
-  (:require [clojure.java.io :as io]
+  (:require [cljc.java-time.local-date :as ld]
+            [clojure.core.matrix :as m]
+            [clojure.java.io :as io]
             [clojure.string :as str]
-            [cljc.java-time.local-date :as ld]
             [net.cgrand.xforms.io :as xio]))
 
 (defn- current-year
@@ -10,15 +11,18 @@
 
 (defn day-input-resource
   "A day's input file."
-  ([day year] (io/resource (format "aoc%s/day%02d.txt" year day)))
-  ([day] (day-input-resource day (current-year))))
+  [day & {:keys [year sample] :or {year (current-year), sample false}}]
+  (let [template "aoc%s/day%02d%s.txt"
+        sample-str (if sample ".sample" "")]
+    (tap> [day year sample])
+    (io/resource (format template year sample-str day))))
 
 (defn day-input
   "A reducible view of a day's input (suitable for a transducer source).
   Note: one must use a method with an IReduce interface to extract values. So
   sequence, for example, will not work. But {re,trans}duce, into, etc. will."
-  ([day year] (-> (day-input-resource day year) xio/lines-in))
-  ([day] (day-input day (current-year))))
+  [day & {:keys [year sample] :or {year (current-year), sample false} :as opts}]
+  (-> (day-input-resource day opts) xio/lines-in))
 
 (defn day-input-string
   ([day year] (-> (day-input-resource day year) slurp str/trim))
